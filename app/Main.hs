@@ -13,6 +13,8 @@ import qualified Text.EditDistance.Linear03ArrayStrictLLVM as L03SL
 import qualified Text.EditDistance.Linear04TailRec as L04
 import qualified Text.EditDistance.Linear04TailRecStrict as L04S
 import qualified Text.EditDistance.Linear04TailRecStrictLLVM as L04SL
+import qualified Text.EditDistance.Linear05TailRecUnsafeStrictLLVM as L05
+import qualified Text.EditDistance.Linear06TailRecUnsafeNoReadStrictLLVM as L06
 import System.Environment
 
 main :: IO ()
@@ -30,6 +32,8 @@ main = do
            | impl == "4" = L04.levenshteinDistance
            | impl == "4S" = L04S.levenshteinDistance
            | impl == "4SL" = L04SL.levenshteinDistance
+           | impl == "5" = L05.levenshteinDistance
+           | impl == "6" = L06.levenshteinDistance
            | otherwise = error "Unknown implementation"
   let s1 = BS.replicate len 'a'
   let s2 = s1
