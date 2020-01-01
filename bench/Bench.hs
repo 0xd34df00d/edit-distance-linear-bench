@@ -1,4 +1,4 @@
-{-# LANGUAGE BangPatterns, OverloadedStrings #-}
+{-# LANGUAGE OverloadedStrings #-}
 
 import qualified Data.ByteString.Char8 as BS
 import Criterion.Main
@@ -17,6 +17,7 @@ import qualified Text.EditDistance.Linear04TailRecStrict as L04S
 import qualified Text.EditDistance.Linear04TailRecStrictLLVM as L04SL
 import qualified Text.EditDistance.Linear05TailRecUnsafeStrictLLVM as L05
 import qualified Text.EditDistance.Linear06TailRecUnsafeNoReadStrictLLVM as L06
+import qualified Text.EditDistance.Cpp as Cpp
 
 main :: IO ()
 main = defaultMain
@@ -26,6 +27,7 @@ main = defaultMain
   , mkGroup "Arr/tailrec" L04.levenshteinDistance L04S.levenshteinDistance L04SL.levenshteinDistance
   , mkBench "Arr/tailrec/unsafe + strict + LLVM" L05.levenshteinDistance
   , mkBench "Arr/tailrec/unsafe + strict + LLVM + no read" L06.levenshteinDistance
+  , bench "C++ FFI" $ nfAppIO (\(s1, s2, s3) -> (,) <$> Cpp.levenshteinDistance s1 s2 <*> Cpp.levenshteinDistance s1 s3) (s1', s2', s3')
   ]
   where
     mkBench name func = bench name $ nf (\(s1, s2, s3) -> (func s1 s2, func s1 s3)) (s1', s2', s3')
