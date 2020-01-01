@@ -1,26 +1,40 @@
 {-# LANGUAGE BangPatterns, OverloadedStrings #-}
 
 import qualified Data.ByteString.Char8 as BS
-import qualified Data.Text as T
 import Criterion.Main
-import Data.Text.Metrics
 
-import Text.EditDistance.Linear
+import qualified Text.EditDistance.Linear01Pure as L01
+import qualified Text.EditDistance.Linear01PureStrict as L01S
+import qualified Text.EditDistance.Linear01PureStrictLLVM as L01SL
+import qualified Text.EditDistance.Linear02PureUnsafe as L02
+import qualified Text.EditDistance.Linear02PureUnsafeStrict as L02S
+import qualified Text.EditDistance.Linear02PureUnsafeStrictLLVM as L02SL
+import qualified Text.EditDistance.Linear03Array as L03
+import qualified Text.EditDistance.Linear03ArrayStrict as L03S
+import qualified Text.EditDistance.Linear03ArrayStrictLLVM as L03SL
+import qualified Text.EditDistance.Linear04TailRec as L04
+import qualified Text.EditDistance.Linear04TailRecStrict as L04S
+import qualified Text.EditDistance.Linear04TailRecStrictLLVM as L04SL
+import qualified Text.EditDistance.Linear05TailRecUnsafeStrictLLVM as L05
+import qualified Text.EditDistance.Linear06TailRecUnsafeNoReadStrictLLVM as L06
 
 main :: IO ()
 main = defaultMain
-  [ bgroup "same string/ed-linear"      [ bench (show num) $ nf (\s -> levenshteinDistance s s) $ BS.replicate num 'a'
-                                        | num <- nums
-                                        ]
-  , bgroup "same string/text-metrics"   [ bench (show num) $ nf (uncurry levenshtein) (T.replicate num "a", T.replicate num "a")
-                                        | num <- nums
-                                        ]
-  , bgroup "diff strings/ed-linear"     [ bench (show num) $ nf (uncurry levenshteinDistance) (BS.replicate num 'a', BS.replicate num 'b')
-                                        | num <- nums
-                                        ]
-  , bgroup "diff strings/text-metrics"  [ bench (show num) $ nf (uncurry levenshtein) (T.replicate num "a", T.replicate num "b")
-                                        | num <- nums
-                                        ]
+  [ mkGroup "Pure" L01.levenshteinDistance L01S.levenshteinDistance L01SL.levenshteinDistance
+  , mkGroup "Pure (unsafe idx)" L02.levenshteinDistance L02S.levenshteinDistance L02SL.levenshteinDistance
+  , mkGroup "Arr" L03.levenshteinDistance L03S.levenshteinDistance L03SL.levenshteinDistance
+  , mkGroup "Arr/tailrec" L04.levenshteinDistance L04S.levenshteinDistance L04SL.levenshteinDistance
+  , mkBench "Arr/tailrec/unsafe + strict + LLVM" L05.levenshteinDistance
+  , mkBench "Arr/tailrec/unsafe + strict + LLVM + no read" L06.levenshteinDistance
   ]
   where
-    nums = [ 1000, 2000, 5000, 10000, 20000 ]
+    mkBench name func = bench name $ nf (\(s1, s2, s3) -> (func s1 s2, func s1 s3)) (s1', s2', s3')
+    mkGroup name f1 f2 f3 = bgroup name $ uncurry mkBench <$> [ ("base", f1)
+                                                              , ("strict", f2)
+                                                              , ("strict + LLVM", f3)
+                                                              ]
+
+    num = 20000
+    s1' = BS.replicate num 'a'
+    s2' = s1'
+    s3' = BS.replicate num 'b'
