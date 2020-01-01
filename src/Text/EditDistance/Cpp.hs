@@ -1,4 +1,5 @@
 {-# LANGUAGE QuasiQuotes, TemplateHaskell #-}
+{-# OPTIONS_GHC -O3 #-}
 
 module Text.EditDistance.Cpp where
 
