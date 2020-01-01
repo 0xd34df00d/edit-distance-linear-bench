@@ -18,8 +18,8 @@ C.verbatim "#pragma GCC optimize (\"O3\")"
 
 levenshteinDistance :: BS.ByteString -> BS.ByteString -> IO Int
 levenshteinDistance s1 s2 = fromIntegral <$> [C.block|size_t {
-	const auto m = $bs-len:s1;
-	const auto n = $bs-len:s2;
+  const auto m = $bs-len:s1;
+  const auto n = $bs-len:s2;
   const auto s1 = $bs-ptr:s1;
   const auto s2 = $bs-ptr:s2;
 
