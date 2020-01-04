@@ -21,4 +21,4 @@ Another (really sloppy, but quick) way of benchmarking a given implementation is
 ```shell
 stack exec -- edit-distance-linear-bench-exe <implementation> +RTS -sstderr
 ```
-where implementation is an identifier like `3SL` (refer to [Merge](app/Main.hs) for the list of possible identifiers).
+where implementation is an identifier like `3SL` (refer to [app/Main.hs](app/Main.hs) for the list of possible identifiers).
