@@ -1,6 +1,9 @@
 module Main where
 
 import qualified Data.ByteString.Char8 as BS
+import System.Environment
+import System.IO.Unsafe
+
 import qualified Text.EditDistance.Linear01Pure as L01
 import qualified Text.EditDistance.Linear01PureStrict as L01S
 import qualified Text.EditDistance.Linear01PureStrictLLVM as L01SL
@@ -16,8 +19,6 @@ import qualified Text.EditDistance.Linear04TailRecStrictLLVM as L04SL
 import qualified Text.EditDistance.Linear05TailRecUnsafeStrictLLVM as L05
 import qualified Text.EditDistance.Linear06TailRecUnsafeNoReadStrictLLVM as L06
 import qualified Text.EditDistance.Cpp as Cpp
-import System.Environment
-import System.IO.Unsafe
 
 main :: IO ()
 main = do
