@@ -56,3 +56,17 @@ benchmarks:
     - criterion
     - text
     - text-metrics
+
+tests:
+  edit-distance-linear-bench-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - edit-distance
+    - edit-distance-linear-bench
+    - hspec
+    - QuickCheck
