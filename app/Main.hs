@@ -15,6 +15,7 @@ import qualified Text.EditDistance.Linear04TailRecStrict as L04S
 import qualified Text.EditDistance.Linear04TailRecStrictLLVM as L04SL
 import qualified Text.EditDistance.Linear05TailRecUnsafeStrictLLVM as L05
 import qualified Text.EditDistance.Linear06TailRecUnsafeNoReadStrictLLVM as L06
+import qualified Text.EditDistance.Linear07TailRecUnsafeNoReadStrictLLVM as L07
 import qualified Text.EditDistance.Cpp as Cpp
 import System.Environment
 import System.IO.Unsafe
@@ -36,6 +37,7 @@ main = do
            | impl == "4SL" = L04SL.levenshteinDistance
            | impl == "5" = L05.levenshteinDistance
            | impl == "6" = L06.levenshteinDistance
+           | impl == "7" = L07.levenshteinDistance
            | impl == "C++" = \s1 s2 -> unsafePerformIO $ Cpp.levenshteinDistance s1 s2
            | otherwise = error "Unknown implementation"
   let s1 = BS.replicate len 'a'
