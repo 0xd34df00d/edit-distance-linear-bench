@@ -7,7 +7,6 @@ module Text.EditDistance.Linear07TailRecUnsafeNoReadStrictLLVM where
 import Data.Foldable (for_)
 import qualified Data.ByteString as BS
 import qualified Data.ByteString.Unsafe as BS
-import qualified Data.Vector.Primitive as V
 import qualified Data.Vector.Primitive.Mutable as MV
 import Control.Monad.ST
 

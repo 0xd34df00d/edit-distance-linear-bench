@@ -28,8 +28,8 @@ main = defaultMain
   , mkGroup "Arr/tailrec" L04.levenshteinDistance L04S.levenshteinDistance L04SL.levenshteinDistance
   , mkBench "Arr/tailrec/unsafe + strict + LLVM" L05.levenshteinDistance
   , mkBench "Arr/tailrec/unsafe + strict + LLVM + no read" L06.levenshteinDistance
+  , mkBench "Vec/tailrec/unsafe + strict + LLVM + no read" L07.levenshteinDistance
   , bench "C++ FFI" $ nfAppIO (\(s1, s2, s3) -> (,) <$> Cpp.levenshteinDistance s1 s2 <*> Cpp.levenshteinDistance s1 s3) (s1', s2', s3')
-  , mkBench "Vecr/tailrec/unsafe + strict + LLVM + no read" L07.levenshteinDistance
   ]
   where
     mkBench name func = bench name $ nf (\(s1, s2, s3) -> (func s1 s2, func s1 s3)) (s1', s2', s3')
