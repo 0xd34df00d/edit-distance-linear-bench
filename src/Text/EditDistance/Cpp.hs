@@ -8,13 +8,13 @@ import Language.C.Inline.Cpp as C
 
 C.context $ C.cppCtx <> C.bsCtx
 
+C.verbatim "#pragma GCC optimize (\"O3\")"
+
 C.include "<algorithm>"
 C.include "<iostream>"
 C.include "<numeric>"
 C.include "<vector>"
 C.include "<string>"
-
-C.verbatim "#pragma GCC optimize (\"O3\")"
 
 levenshteinDistance :: BS.ByteString -> BS.ByteString -> IO Int
 levenshteinDistance s1 s2 = fromIntegral <$> [C.block|size_t {
