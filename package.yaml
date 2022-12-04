@@ -44,6 +44,8 @@ executables:
     - -rtsopts
     dependencies:
     - edit-distance-linear-bench
+    - mwc-random
+    - random-bytestring
 
 benchmarks:
   edit-distance-linear-benchmarks:

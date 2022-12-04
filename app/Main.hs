@@ -1,8 +1,12 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Main where
 
 import qualified Data.ByteString.Char8 as BS
+import Data.ByteString.Random.MWC
 import System.Environment
 import System.IO.Unsafe
+import System.Random.MWC
 
 import qualified Text.EditDistance.Linear01Pure as L01
 import qualified Text.EditDistance.Linear01PureStrict as L01S
@@ -39,9 +43,11 @@ main = do
            | impl == "6" = L06.levenshteinDistance
            | impl == "C++" = \s1 s2 -> unsafePerformIO $ Cpp.levenshteinDistance s1 s2
            | otherwise = error "Unknown implementation"
-  let s1 = BS.replicate len 'a'
-  let s2 = BS.replicate len 'a'
-  let s3 = BS.replicate len 'b'
+
+  gen <- create
+  s1 <- randomGen gen len
+  s2 <- randomGen gen len
+  s3 <- randomGen gen len
   print $ func s1 s2
   print $ func s1 s3
   where
